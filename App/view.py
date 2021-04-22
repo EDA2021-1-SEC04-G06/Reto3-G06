@@ -36,10 +36,26 @@ operación solicitada
 
 def printMenu():
     print("Bienvenido")
-    print("1- Cargar información en el catálogo")
-    print("2- ")
+    print("1- Inicializar Catalogo")
+    print("2- Cargar información")
+    print("3- Requerimiento 1")
+    print("4- Requerimiento 2")
+    print("5- Requerimiento 3")
+    print("6- Requerimiento 4")
+    print("7- Requerimiento 5")
+    print("0- Salir")
+
 
 catalog = None
+
+
+def initCatalog(tipo):
+    return controller.initCatalog(tipo)
+
+
+def loadData(catalog):
+    controller.loadData(catalog)
+
 
 """
 Menu principal
@@ -48,9 +64,30 @@ while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
-        print("Cargando información de los archivos ....")
-
+        print("Inicializando Catálogo ....")
+        catalog = controller.initCatalog()
     elif int(inputs[0]) == 2:
+        print("Cargando información de los archivos ....")
+        controller.loadData(catalog)
+        print("Eventos cargados: " + str(controller.sizeAnlis(catalog)))
+        print("Total de artistas: ")
+        print("Total de pistas de audio: ")
+        print("Los primeros 5 eventos : ")
+        print("Los ultimos 5 eventos : ")
+    elif int(inputs[0]) == 3:
+        carac = input('Ingrese la característica: ')
+        valmin = input('Ingrese el valor minimo: ')
+        valmax = input('Ingrese el valor maximo: ')
+        respuesta = controller.requerimiento1(catalog,carac,valmin,valmax)
+        print('El total de eventos en es rengo es: ' + str(respuesta[0]))
+        print('El Numero de artistas es: ' + str(respuesta[1]))
+    elif int(inputs[0]) == 4:
+        pass
+    elif int(inputs[0]) == 5:
+        pass
+    elif int(inputs[0]) == 6:
+        pass
+    elif int(inputs[0]) == 7:
         pass
 
     else:

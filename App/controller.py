@@ -30,9 +30,46 @@ El controlador se encarga de mediar entre la vista y el modelo.
 """
 
 # Inicialización del Catálogo de libros
+def initCatalog():
+    """
+    Llama la funcion de inicializacion del catalogo del modelo.
+    """
+    catalog = model.newCatalog()
+    return catalog
+
+
+def loadData(catalog):
+
+    loadAnalisis(catalog)
+    return catalog
+
 
 # Funciones para la carga de datos
+def loadAnalisis(catalog):
+    analisisfile = cf.data_dir + 'context_content_features-small.csv'
+    input_file = csv.DictReader(open(analisisfile, encoding='utf-8'))
+    for ana in input_file:
+        model.addAnalisis(catalog, ana)
 
+
+def loadSentimientos(catalog):
+    sentifile = cf.data_dir + 'sentiment_values.csv'
+    input_file = csv.DictReader(open(sentifile, encoding='utf-8'))
+    for senti in input_file:
+        model.addSentimi(catalog, senti)
+
+
+def loadInfo(catalog):
+    infofile = cf.data_dir + 'user_track_hashtag_timestamp-small.csv'
+    input_file = csv.DictReader(open(infofile, encoding='utf-8'))
+    for info in input_file:
+        model.addInfo(catalog, info)
 # Funciones de ordenamiento
 
 # Funciones de consulta sobre el catálogo
+
+def sizeAnlis(catalog):
+    return model.sizeAnlis(catalog)
+
+def requerimiento1(catalog,carac,valmin,valmax):
+    return model.requerimiento1(catalog,carac,valmin,valmax)
