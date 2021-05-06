@@ -73,6 +73,7 @@ def newCatalog():
                                       comparefunction=compare)
     catalog['energy'] = om.newMap(omaptype='RBT',
                                       comparefunction=compare)
+                                      
 
     return catalog
 
@@ -248,7 +249,37 @@ def requerimiento2(catalog, minEner,maxEner,minDanc,maxDanc):
     for dato2 in lt.iterator(listdanc):
         for evento2 in lt.iterator(dato2):
             esta2=lt.isPresent(listeven,evento2)
-            if esta2 != 0:
+            esta3=lt.isPresent(listeven2,evento2)
+            if esta2 != 0 and esta3 == 0:
+
+                lt.addLast(listeven2,evento2)
+                total +=1
+    siz = lt.size(listeven2)
+    for i in range(0,5):
+        n=rd.randint(1,siz)
+        lt.addLast(final,lt.getElement(listeven2,n))
+    return total,final
+
+
+    def requerimiento3(catalog, minTem,maxTem,minInstru,maxInstru):
+    listener = om.values(catalog['tempo'],minTem,maxTem)
+    listdanc = om.values(catalog['instrumentalness'],minInstru,maxInstru)
+    total = 0
+    listeven=lt.newList("ARRAY_LIST",compareIds)
+    listeven2=lt.newList("ARRAY_LIST",compareIds)
+    final=lt.newList("ARRAY_LIST",compareIds)
+
+    for dato in lt.iterator(listener):
+        for evento in lt.iterator(dato):
+            esta=lt.isPresent(listeven,evento)
+            if esta == 0:
+                lt.addLast(listeven,evento)
+
+    for dato2 in lt.iterator(listdanc):
+        for evento2 in lt.iterator(dato2):
+            esta2=lt.isPresent(listeven,evento2)
+            esta3=lt.isPresent(listeven2,evento2)
+            if esta2 != 0 and esta3 == 0:
                 lt.addLast(listeven2,evento2)
                 total +=1
     siz = lt.size(listeven2)
