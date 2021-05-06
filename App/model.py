@@ -26,6 +26,7 @@
 
 
 import config as cf
+import random as rd
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.ADT import orderedmap as om
@@ -202,17 +203,19 @@ def compare(eve1, eve2):
 
 def compareIds(id1, id2):
   
-    if (id1 == id2):
+    if (id1['track_id'] == id2['track_id']):
         return 0
-    elif id1 > id2:
+    elif id1['track_id'] > id2['track_id']:
         return 1
     else:
         return -1
 
+
+
 # Funciones de ordenamiento
 
 def requerimiento1(catalog,carac,valmin,valmax):
-    listi= om.values(catalog[carac],valmin,valmax)
+    listi = om.values(catalog[carac],valmin,valmax)
     eventost=0
     artistast=0
     listartis=lt.newList("ARRAY_LIST")
@@ -226,3 +229,30 @@ def requerimiento1(catalog,carac,valmin,valmax):
             
 
     return eventost,artistast
+
+
+def requerimiento2(catalog, minEner,maxEner,minDanc,maxDanc):
+    listener = om.values(catalog['energy'],minEner,maxEner)
+    listdanc = om.values(catalog['danceability'],minDanc,maxDanc)
+    total = 0
+    listeven=lt.newList("ARRAY_LIST",compareIds)
+    listeven2=lt.newList("ARRAY_LIST",compareIds)
+    final=lt.newList("ARRAY_LIST",compareIds)
+
+    for dato in lt.iterator(listener):
+        for evento in lt.iterator(dato):
+            esta=lt.isPresent(listeven,evento)
+            if esta == 0:
+                lt.addLast(listeven,evento)
+
+    for dato2 in lt.iterator(listdanc):
+        for evento2 in lt.iterator(dato2):
+            esta2=lt.isPresent(listeven,evento2)
+            if esta2 != 0:
+                lt.addLast(listeven2,evento2)
+                total +=1
+    siz = lt.size(listeven2)
+    for i in range(0,5):
+        n=rd.randint(1,siz)
+        lt.addLast(final,lt.getElement(listeven2,n))
+    return total,final

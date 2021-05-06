@@ -57,6 +57,9 @@ def loadData(catalog):
     controller.loadData(catalog)
 
 
+def impResultados(resultados):
+    print(resultados)
+
 """
 Menu principal
 """
@@ -79,10 +82,17 @@ while True:
         valmin = input('Ingrese el valor minimo: ')
         valmax = input('Ingrese el valor maximo: ')
         respuesta = controller.requerimiento1(catalog,carac,valmin,valmax)
-        print('El total de eventos en es rengo es: ' + str(respuesta[0]))
+        print('El total de eventos en es rango es: ' + str(respuesta[0]))
         print('El Numero de artistas es: ' + str(respuesta[1]))
     elif int(inputs[0]) == 4:
-        pass
+        minEner = input('Ingrese el el valor minimo de Energy que quiere ')
+        maxEner = input('Ingrese el el valor maximo de Energy que quiere ')
+        minDanc = input('Ingrese el el valor minimo de Danceability que quiere ')
+        maxDanc = input('Ingrese el el valor maximo de Danceability que quiere ')
+        respuesta = controller.requerimiento2(catalog, minEner,maxEner,minDanc,maxDanc)
+        print('El total de pistas unicas es: ' + str(respuesta[0]))
+        print('5 pistas aleatorias que cumplen estas condiciones son')
+        impResultados(respuesta[1])
     elif int(inputs[0]) == 5:
         pass
     elif int(inputs[0]) == 6:
