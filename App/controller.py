@@ -76,3 +76,7 @@ def requerimiento1(catalog,carac,valmin,valmax):
 
 def requerimiento2(catalog, minEner,maxEner,minDanc,maxDanc):
     return model.requerimiento2(catalog, minEner,maxEner,minDanc,maxDanc)
+
+def requerimiento3(catalog, minTem,maxTem,minInstru,maxInstru):
+    return model.requerimiento2(catalog, minTem,maxTem,minInstru,maxInstru)
+    

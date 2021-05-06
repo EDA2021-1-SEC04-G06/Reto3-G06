@@ -94,7 +94,16 @@ while True:
         print('5 pistas aleatorias que cumplen estas condiciones son')
         impResultados(respuesta[1])
     elif int(inputs[0]) == 5:
-        pass
+        minTem  = input("Ingrese el el valor minimo del rango para el Tempo que quiere")
+        maxTem  = input("Ingrese el el valor maximo del rango para el Tempo que quiere")
+        minInstru  = input("Ingrese el el valor minimo rango para Instrumentalnes que quiere ")
+        maxInstru  = input("Ingrese el el valor maximo rango para Instrumentalnes que quiere")
+        respuesta = controller.requerimiento3(minTem, maxTem, minInstru, maxInstru)
+        print('El total de pistas unicas es: ' + str(respuesta[0]))
+        print('5 pistas aleatorias que cumplen estas condiciones son')
+        impResultados(respuesta[1])
+
+
     elif int(inputs[0]) == 6:
         pass
     elif int(inputs[0]) == 7:
