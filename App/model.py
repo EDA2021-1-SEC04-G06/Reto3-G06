@@ -261,7 +261,7 @@ def requerimiento2(catalog, minEner,maxEner,minDanc,maxDanc):
     return total,final
 
 
-    def requerimiento3(catalog, minTem,maxTem,minInstru,maxInstru):
+def requerimiento3(catalog, minTem,maxTem,minInstru,maxInstru):
     listener = om.values(catalog['tempo'],minTem,maxTem)
     listdanc = om.values(catalog['instrumentalness'],minInstru,maxInstru)
     total = 0
@@ -283,7 +283,25 @@ def requerimiento2(catalog, minEner,maxEner,minDanc,maxDanc):
                 lt.addLast(listeven2,evento2)
                 total +=1
     siz = lt.size(listeven2)
+    
     for i in range(0,5):
         n=rd.randint(1,siz)
         lt.addLast(final,lt.getElement(listeven2,n))
     return total,final
+
+def requerimiento4(catalog,tablage,listage):
+    dicgene={}
+    total=0
+    for gene in listage:
+        listauto=lt.newList("ARRAY_LIST")
+        numeve=0
+        listgene = om.values(catalog['tempo'],str(tablage[gene][0]),str(tablage[gene][1]))
+        for dto in lt.iterator(listgene):
+            total += lt.size(dto)
+            for eve in lt.iterator(dto):
+                numeve+=1
+                esta=lt.isPresent(listauto,eve['artist_id'])
+                if esta == 0:
+                    lt.addLast(listauto,eve['artist_id'])
+        dicgene[gene]=[lt.subList(listauto,1,10),numeve,lt.size(listauto)]
+    return total, dicgene

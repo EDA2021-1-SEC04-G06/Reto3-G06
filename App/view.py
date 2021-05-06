@@ -47,7 +47,7 @@ def printMenu():
 
 
 catalog = None
-
+tablage = {'reggae':[60,90],'down-tempo':[70,100],'chill-out':[90,120],'hip-hop':[85,115],'jazzandfunk':[120,150],'pop':[100,130],'r&b':[60,80],'rock':[110,140],'metal':[100,160]}
 
 def initCatalog(tipo):
     return controller.initCatalog(tipo)
@@ -58,7 +58,28 @@ def loadData(catalog):
 
 
 def impResultados(resultados):
-    print(resultados)
+    n=1
+    for even in lt.iterator(resultados):
+        print( 'Track '+ str(n) + ':  ' + str(even['track_id']) + ' con Energy de ' + str(even['energy']) + '  y Danceability de ' + str(even['danceability']) )
+        n+=1
+
+
+def impResultados2(resultados):
+    n=1
+    for even in lt.iterator(resultados):
+        print( 'Track '+ str(n) + ':  ' + str(even['track_id']) + ' con Tempo de ' + str(even['tempo']) + '  y Instrumentalness de ' + str(even['instrumentalness']) )
+        n+=1
+
+def impResultados3(resultados):
+    for gene in resultados.keys():
+        print("Para el " + str(gene).upper())
+        print('Tiene ' + str(resultados[gene][1]) + ' reproducciones')
+        print('Tiene ' + str(resultados[gene][2]) + ' diferentes artistas')
+        print('Algunos artistas son:')
+        n=1
+        for art in resultados[gene][0]['elements']:
+            print('Artista'+str(n)+" : " + str(art))
+            n+=1
 
 """
 Menu principal
@@ -94,18 +115,37 @@ while True:
         print('5 pistas aleatorias que cumplen estas condiciones son')
         impResultados(respuesta[1])
     elif int(inputs[0]) == 5:
-        minTem  = input("Ingrese el el valor minimo del rango para el Tempo que quiere")
-        maxTem  = input("Ingrese el el valor maximo del rango para el Tempo que quiere")
+        minTem  = input("Ingrese el el valor minimo del rango para el Tempo que quiere ")
+        maxTem  = input("Ingrese el el valor maximo del rango para el Tempo que quiere ")
         minInstru  = input("Ingrese el el valor minimo rango para Instrumentalnes que quiere ")
-        maxInstru  = input("Ingrese el el valor maximo rango para Instrumentalnes que quiere")
-        respuesta = controller.requerimiento3(minTem, maxTem, minInstru, maxInstru)
+        maxInstru  = input("Ingrese el el valor maximo rango para Instrumentalnes que quiere ")
+        respuesta = controller.requerimiento3(catalog,minTem, maxTem, minInstru, maxInstru)
         print('El total de pistas unicas es: ' + str(respuesta[0]))
         print('5 pistas aleatorias que cumplen estas condiciones son')
-        impResultados(respuesta[1])
-
+        impResultados2(respuesta[1])
 
     elif int(inputs[0]) == 6:
-        pass
+        print("Genero         BPM Tipico ")
+        print("Reggae          60 a 90")
+        print("Chill-out       90 a 120")
+        print("Hip-hop         85 a 115")
+        print("Jazz and Funk  120 a 125")
+        print("Pop            100 a 130")
+        print("R&B             60 a 80")
+        print("Rock           110 a 140")
+        print("Metal          100 a 160")
+        yon=input("Ingrese 1 si desea agregar un genero que no esta en la tabla (0 en caso contrario) ")
+        if yon == 1:
+            gene=input('Ingrese el nombre del genero ')
+            minge=input('Ingrese el vaalor minimo del rango de Tempo del genero ')
+            maxge=input('Ingrese el vaalor maximo del rango de Tempo del genero ')
+            tablage[gene.lower()]=[minge,maxge]
+        generosf= input('Ingrese la lista de generos que desea buscar (separados por ",") ')
+        listage = generosf.lower().strip().split(",")
+        respuesta= controller.requerimiento4(catalog,tablage,listage)
+        print('El total de reproducciones de estos generos es: ' + str(respuesta[0]))
+        impResultados3(respuesta[1])
+
     elif int(inputs[0]) == 7:
         pass
 

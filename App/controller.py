@@ -78,5 +78,7 @@ def requerimiento2(catalog, minEner,maxEner,minDanc,maxDanc):
     return model.requerimiento2(catalog, minEner,maxEner,minDanc,maxDanc)
 
 def requerimiento3(catalog, minTem,maxTem,minInstru,maxInstru):
-    return model.requerimiento2(catalog, minTem,maxTem,minInstru,maxInstru)
+    return model.requerimiento3(catalog, minTem,maxTem,minInstru,maxInstru)
     
+def requerimiento4(catalog,tablage,listage):
+    return model.requerimiento4(catalog,tablage,listage)
