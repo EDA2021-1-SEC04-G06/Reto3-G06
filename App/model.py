@@ -27,6 +27,8 @@
 
 import config as cf
 import random as rd
+from datetime import datetime
+import time
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.ADT import orderedmap as om
@@ -73,7 +75,12 @@ def newCatalog():
                                       comparefunction=compare)
     catalog['energy'] = om.newMap(omaptype='RBT',
                                       comparefunction=compare)
-                                      
+    catalog['tiempo'] = om.newMap(omaptype='RBT',
+                                      comparefunction=compare)
+    catalog['sentimientos']= mp.newMap(2000,
+                                   maptype = 'CHAINING',
+                                   loadfactor = 4.0,
+                                   comparefunction = comparesenti)
 
     return catalog
 
@@ -90,6 +97,39 @@ def addAnalisis(catalog, analis):
     agregaAcou(catalog['acousticness'],analis)
     agregaEner(catalog['energy'],analis)
     return catalog
+
+
+def addInfo(catalog, info):
+    agregaTiempo(catalog['tiempo'], info)
+
+
+def addSentimi(catalog, info):
+    sentimi = catalog['sentimientos']
+
+    sentiss = info['hashtag']
+    exists = mp.contains(sentimi, sentiss)
+    if exists:
+        entry = mp.get(sentimi, sentiss)
+        sen = me.getValue(entry)
+    else:
+        entry = {'hashtag': "", 'sentimientos': None}
+        entry['hashtag'] = str(sentiss)
+        entry['sentimientos'] = info
+        sen = entry
+        mp.put(sentimi, sentiss, sen)
+
+
+def agregaTiempo(mapa, info):
+    fecha = info["created_at"]
+    dato = datetime.strptime(fecha, "%Y-%m-%d %H:%M:%S").time()
+    entry = om.get(mapa, dato)
+    if entry is None:
+        newEntry = newdataTime(info)
+        om.put(mapa, dato, newEntry)
+    else:
+        newEntry = me.getValue(entry)
+    agregar(newEntry, info)
+    return mapa
 
 def agregaInstru(mapa, analis):
     dato = analis['instrumentalness']
@@ -187,6 +227,10 @@ def agregar(newEntry, analis):
 def newdata(analis):
     entry = lt.newList('SINGLE_LINKED', compareIds)
     return entry
+
+def newdataTime(analis):
+    entry = lt.newList('SINGLE_LINKED', compareTime)
+    return entry
 # Funciones de consulta
 
 def sizeAnlis(catalog):
@@ -211,7 +255,24 @@ def compareIds(id1, id2):
     else:
         return -1
 
+def compareTime(time1,time2):
+    fecha1 = datetime.strptime(time1['created_at'],"%Y-%m-%d %H:%M:%S")
+    fecha2 = datetime.strptime(time2['created_at'],"%Y-%m-%d %H:%M:%S")
+    if (fecha1 == fecha2):
+        return 0
+    elif (fecha1 > fecha2):
+        return 1
+    else:
+        return -1
 
+def comparesenti(id, entry):
+    identry = me.getKey(entry)
+    if (id == identry):
+        return 0
+    elif (id > identry):
+        return 1
+    else:
+        return -1
 
 # Funciones de ordenamiento
 
@@ -305,3 +366,48 @@ def requerimiento4(catalog,tablage,listage):
                     lt.addLast(listauto,eve['artist_id'])
         dicgene[gene]=[lt.subList(listauto,1,10),numeve,lt.size(listauto)]
     return total, dicgene
+
+def requerimiento5(catalog, tablage, mintime, maxtime):
+    
+    listime = om.values(catalog['tiempo'],datetime.strptime(mintime,"%H:%M:%S").time(),datetime.strptime(maxtime,"%H:%M:%S").time())
+    listt=lt.newList("ARRAY_LIST")
+    mayor=0
+    generom=None
+    dictracks={}
+    for gene in tablage.keys():
+        n=0  
+        dictracksg={}
+        listgene = om.values(catalog['tempo'],str(tablage[gene][0]),str(tablage[gene][1]))
+        for dto in lt.iterator(listgene):
+            for d in lt.iterator(dto):
+                lt.addLast(listt,d["track_id"])
+              
+        for timedata in lt.iterator(listime):
+            for t in lt.iterator(timedata):
+                if lt.isPresent(listt,t["track_id"]) !=0:
+                    n+=1
+                    if t["track_id"] in dictracksg.keys():
+                        dictracksg[t["track_id"]].append(t['hashtag'])
+                    else:
+                        dictracksg[t["track_id"]]=[t['hashtag']]
+        if n> mayor:
+            mayor=n
+            generom=gene
+            dictracks=dictracksg
+    final={}
+    for can in dictracks.keys():
+        nn=len(dictracks[can])
+        prom=0
+        suma=0
+        for h in dictracks[can]:
+            senti=mp.get(catalog['sentimientos'],h)
+            if senti:
+                m=me.getValue(senti)['sentimientos']
+                if m['vader_avg'] !='':
+                    suma += float(m['vader_avg'])
+        prom= suma/nn
+        final[can]=[nn,prom]
+    return generom,mayor,final
+    
+    
+    

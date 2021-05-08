@@ -41,6 +41,8 @@ def initCatalog():
 def loadData(catalog):
 
     loadAnalisis(catalog)
+    loadSentimientos(catalog)
+    loadInfo(catalog)
     return catalog
 
 
@@ -82,3 +84,6 @@ def requerimiento3(catalog, minTem,maxTem,minInstru,maxInstru):
     
 def requerimiento4(catalog,tablage,listage):
     return model.requerimiento4(catalog,tablage,listage)
+
+def requerimiento5(catalog, tablage, mintime, maxtime):
+    return model.requerimiento5(catalog, tablage, mintime, maxtime)

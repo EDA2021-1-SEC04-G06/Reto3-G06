@@ -57,6 +57,7 @@ def loadData(catalog):
     controller.loadData(catalog)
 
 
+
 def impResultados(resultados):
     n=1
     for even in lt.iterator(resultados):
@@ -80,6 +81,13 @@ def impResultados3(resultados):
         for art in resultados[gene][0]['elements']:
             print('Artista'+str(n)+" : " + str(art))
             n+=1
+
+def impResultados4(resultados):
+    print('Algunas pistas son:')
+    n=1
+    for tra in resultados.keys() and not(n>10):
+        print('Track Top '+str(n)+" : " + str(tra) + " con " + str(resultados[tra][0]) + " hashtags y Vader = " + str(resultados[tra][1]) )
+        n+=1
 
 """
 Menu principal
@@ -147,7 +155,11 @@ while True:
         impResultados3(respuesta[1])
 
     elif int(inputs[0]) == 7:
-        pass
+        mintime=input('Ingrese el vaalor minimo del rango de Tiempo  ')
+        maxtime=input('Ingrese el vaalor maximo del rango de Tiempo  ')
+        respuesta = controller.requerimiento5(catalog, tablage, mintime, maxtime)
+        print("El genero mas referenciado en la tabla de horas es" + str(respuesta[0])+" con " + str(respuesta[1])+ " reproducciones")
+        impResultados4(respuesta[2])
 
     else:
         sys.exit(0)
